@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Long - DVC IPA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+
+    <style>
+        /* --- BIẾN MÀU CSS (VARIABLES) --- */
+        :root {
+            --bg-color: #ffffff;
+            --bg-dark: #2c3e50;
+            --text-color: #333;
+            --text-light: #ecf0f1;
+            --accent-blue: #3498db;
+            --accent-green: #2ecc71;
+            --accent-red: #e74c3c;
+            --container-bg: rgba(255, 255, 255, 0.9);
+            --container-bg-dark: rgba(44, 62, 80, 0.85);
+            --input-bg: #ecf0f1;
+            --input-bg-dark: #3b5067;
+            --input-border: #bdc3c7;
+            --input-border-dark: #2c3e50;
+            --focus-glow: rgba(52, 152, 219, 0.25);
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            --shadow-dark: rgba(0, 0, 0, 0.4);
+            --backdrop-filter: blur(10px) saturate(150%);
+        }
+
+        /* --- THIẾT LẬP CHUNG CHO BODY --- */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            box-sizing: border-box;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        /* --- GIAO DIỆN TỐI (DARK THEME) --- */
+        body.dark-theme {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%);
+        }
+
+        /* --- CONTAINER CHÍNH --- */
+        .container {
+            background-color: var(--container-bg);
+            backdrop-filter: var(--backdrop-filter);
+            -webkit-backdrop-filter: var(--backdrop-filter);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px var(--shadow-light);
+            width: 100%;
+            max-width: 1800px; 
+            box-sizing: border-box;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        body.dark-theme .container {
+            background-color: var(--container-bg-dark);
+            box-shadow: 0 10px 40px var(--shadow-dark);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* --- TIÊU ĐỀ H1 --- */
+        h1 {
+            color: var(--accent-blue);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        body.dark-theme h1 {
+            color: var(--text-light);
+        }
+
+        /* --- BỐ CỤC DASHBOARD --- */
+        .dashboard-layout {
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+        }
+        .main-panel {
+            flex: 3;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        .sidebar {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            min-width: 0;
+        }
+
+        /* --- HỘP NỘI DUNG (SECTION) --- */
+        .section-box {
+            background-color: var(--input-bg);
+            padding: 20px;
+            border-radius: 12px;
+        }
+        body.dark-theme .section-box {
+             background-color: var(--input-bg-dark);
+        }
+        .section-box h2 {
+            font-size: 1.4rem;
+            margin-top: 0;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--input-border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        body.dark-theme .section-box h2 {
+            border-bottom-color: var(--input-border-dark);
+        }
+
+        /* --- NHÓM NHẬP LIỆU (INPUT GROUP) --- */
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; margin-bottom: 8px; font-weight: 500; }
+        .input-wrapper { position: relative; }
+        .input-wrapper .fas { position: absolute; top: 50%; left: 15px; transform: translateY(-50%); color: #95a5a6; }
+        .input-group input, .input-group select {
+            width: 100%; padding: 12px;
+            padding-left: 40px; border-radius: 8px;
+            border: 1px solid var(--input-border); background-color: var(--input-bg);
+            color: var(--text-color); font-size: 1rem; box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        body.dark-theme .input-group input, body.dark-theme .input-group select {
+            background-color: var(--input-bg-dark);
+            border-color: var(--input-border-dark);
+            color: var(--text-light);
+        }
+        .input-group input:focus, .input-group select:focus {
+            outline: none; border-color: var(--accent-blue);
+            box-shadow: 0 0 0 4px var(--focus-glow);
+        }
+
+        /* --- NHÓM NÚT BẤM (BUTTON GROUP) --- */
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .btn {
+            padding: 8px 16px; border: none;
+            border-radius: 8px; font-size: 0.9rem;
+            font-weight: 600; cursor: pointer;
+            transition: all 0.25s ease;
+            display: inline-flex; align-items: center;
+            justify-content: center; gap: 8px;
+            box-shadow: 0 1px 3px var(--shadow-light);
+        }
+        body.dark-theme .btn {
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow-light);
+        }
+        body.dark-theme .btn:hover {
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 3px var(--shadow-light);
+        }
+        .btn-primary { background-color: var(--accent-blue); color: white; }
+        .btn-primary:hover { background-color: #2980b9; }
+        .btn-secondary { background-color: var(--accent-green); color: white; }
+        .btn-secondary:hover { background-color: #27ae60; }
+        .btn-tertiary { background-color: var(--accent-red); color: white; }
+        .btn-tertiary:hover { background-color: #c0392b; }
+
+        /* --- CÁC Ô NHẬP LINK THEO NGÀY --- */
+        #dayInputs {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        .day-input-row {
+            display: grid;
+            /* THAY ĐỔI TỶ LỆ: ô link (7fr) giờ rộng gấp 7 lần ô alias (1fr) */
+            grid-template-columns: 50px 190fr 100fr 3px; 
+            align-items: center;
+            gap: 1px;
+        }
+        .day-input-row label {
+            font-weight: 500; font-size: 0.95rem;
+            text-align: right; padding-right: 5px;
+        }
+        .input-wrapper-extended {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .input-wrapper-extended input {
+            width: 100%; padding: 12px 15px;
+            border-radius: 8px; border: 1px solid var(--input-border);
+            background-color: #fff; color: var(--text-color);
+            font-size: 0.95rem; box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+        }
+        #dayInputs input[id^="urlInput"] {
+             padding: 12px 35px 12px 15px;
+        }
+        body.dark-theme .input-wrapper-extended input {
+            background-color: var(--bg-dark);
+            border-color: var(--input-border-dark);
+            color: var(--text-light);
+        }
+        .input-wrapper-extended input:focus {
+            outline: none; border-color: var(--accent-blue);
+            box-shadow: 0 0 0 4px var(--focus-glow);
+        }
+        
+        /* === START: THAY ĐỔI ĐÃ THÊM === */
+        #dayInputs input[id^="aliasInput"]:read-only {
+            cursor: not-allowed;
+        }
+        /* === END: THAY ĐỔI ĐÃ THÊM === */
+
+        /* CSS cho trạng thái thành công/lỗi của ô input */
+        .input-wrapper-extended input.success {
+            border-color: var(--accent-green);
+            background-color: #e8f9f1;
+        }
+        .input-wrapper-extended input.error {
+            border-color: var(--accent-red);
+            background-color: #fdeaea;
+        }
+        body.dark-theme .input-wrapper-extended input.success {
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+        body.dark-theme .input-wrapper-extended input.error {
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+
+        .clear-single-link-btn {
+            position: absolute; right: 0; top: 50%;
+            transform: translateY(-50%);
+            width: 30px; height: 30px; border: none; background: transparent;
+            color: #95a5a6; cursor: pointer; font-size: 0.9rem;
+            opacity: 0.5; transition: opacity 0.2s, color 0.2s;
+        }
+        .clear-single-link-btn:hover {
+            opacity: 1;
+            color: var(--accent-red);
+        }
+        .day-result-wrapper {
+            display: flex; align-items: center; justify-content: flex-start;
+            gap: 8px; font-size: 0.9rem;
+        }
+        .day-result-wrapper .fa-spinner { color: var(--accent-blue); }
+        .copy-single-link-btn {
+             background: none; border: none; color: var(--accent-green);
+             cursor: pointer; opacity: 0.7; transition: opacity 0.2s;
+        }
+        .copy-single-link-btn:hover { opacity: 1; }
+
+        /* --- START: NÂNG CẤP KHU VỰC TẠO MẬT KHẨU --- */
+        .password-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .password-input-group .input-wrapper {
+            flex-grow: 1;
+        }
+        .password-input-group .input-wrapper input {
+            height: 45px;
+            padding-top: 0;
+            padding-bottom: 0;
+            padding-left: 40px; /* Thêm padding cho icon */
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .password-input-group .btn {
+            flex-shrink: 0;
+            height: 45px;
+            box-shadow: 0 2px 5px var(--shadow-light);
+        }
+        .password-output-wrapper {
+            position: relative;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid var(--input-border);
+        }
+        body.dark-theme .password-output-wrapper {
+            background-color: var(--bg-dark);
+            border-color: var(--input-border-dark);
+        }
+
+        /* START: CSS CHO KHU VỰC HIỂN THỊ KẾT QUẢ (MẬT KHẨU & HTML) */
+        .output-label {
+            padding: 10px 15px 5px;
+            margin: 0;
+            display: block;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        body.dark-theme .output-label {
+            color: var(--text-light);
+        }
+
+        #passwordOutputDisplay,
+        #githubLinkOutput {
+            padding: 15px 50px 15px 15px; /* Thêm padding phải để chừa chỗ cho nút copy */
+            margin: 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.95rem;
+            color: var(--text-color);
+            white-space: pre-wrap;
+            word-break: break-all;
+            overflow-y: auto;
+            border-radius: 8px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-blue) transparent;
+        }
+
+        #passwordOutputDisplay { max-height: 150px; }
+        #githubLinkOutput { max-height: 220px; font-size: 0.9rem; }
+
+        body.dark-theme #passwordOutputDisplay,
+        body.dark-theme #githubLinkOutput {
+            color: var(--text-light);
+        }
+        #passwordOutputDisplay::-webkit-scrollbar,
+        #githubLinkOutput::-webkit-scrollbar {
+            width: 5px;
+        }
+        #passwordOutputDisplay::-webkit-scrollbar-track,
+        #githubLinkOutput::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        #passwordOutputDisplay::-webkit-scrollbar-thumb,
+        #githubLinkOutput::-webkit-scrollbar-thumb {
+            background-color: var(--accent-blue);
+            border-radius: 5px;
+        }
+        /* END: CSS CHO KHU VỰC HIỂN THỊ KẾT QUẢ */
+
+        /* CSS CHO NÚT SAO CHÉP BÊN TRONG */
+        #copyPasswordBtn,
+        #copyHtmlBtn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 5px;
+            border-radius: 5px;
+            transition: all 0.2s ease;
+        }
+        body.dark-theme #copyPasswordBtn,
+        body.dark-theme #copyHtmlBtn {
+            color: #adb5bd;
+        }
+        #copyPasswordBtn:hover,
+        #copyHtmlBtn:hover {
+            color: var(--accent-blue);
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+        #copyPasswordBtn.copied,
+        #copyHtmlBtn.copied {
+            color: var(--accent-green);
+        }
+        #password-generator-section .button-group {
+            justify-content: flex-end;
+            margin-top: 0;
+        }
+        /* --- END: NÂNG CẤP KHU VỰC TẠO MẬT KHẨU --- */
+
+        .success-message { color: var(--accent-green) !important; font-weight: 500; }
+        .error-message { color: var(--accent-red) !important; font-weight: 500; }
+
+        #notification-container {
+            position: fixed; top: 20px; right: 20px;
+            z-index: 1000; display: flex; flex-direction: column; gap: 12px;
+        }
+        .notification {
+            min-width: 300px; max-width: 320px;
+            background-color: var(--container-bg); color: var(--text-color);
+            border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            padding: 16px; display: flex; align-items: flex-start;
+            gap: 12px; position: relative; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.5);
+            transition: background-color 0.4s ease, color 0.4s ease, border 0.4s ease;
+            animation: slideIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+        .notification.notification--out {
+            animation: slideOut 0.8s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards;
+        }
+        .notification.success { border-left: 5px solid var(--accent-green); }
+        .notification.error   { border-left: 5px solid var(--accent-red); }
+        .notification.info    { border-left: 5px solid var(--accent-blue); }
+        body.dark-theme .notification {
+            background-color: var(--container-bg-dark); color: var(--text-light);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .notification__icon { font-size: 1.5rem; margin-top: 2px; }
+        .notification.success .notification__icon { color: var(--accent-green); }
+        .notification.error .notification__icon   { color: var(--accent-red); }
+        .notification.info .notification__icon    { color: var(--accent-blue); }
+        .notification__content { flex-grow: 1; }
+        .notification__message {
+            margin: 0; padding-right: 20px;
+            line-height: 1.4; font-weight: 500;
+            word-wrap: break-word;
+        }
+        .notification__close-btn {
+            position: absolute; top: 8px; right: 10px;
+            background: none; border: none; color: inherit;
+            font-size: 1.4rem; line-height: 1; cursor: pointer;
+            opacity: 0.5; transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .notification__close-btn:hover { opacity: 1; transform: scale(1.1); }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideOut { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(100%); } }
+
+        #themeToggleButton {
+            position: fixed; top: 20px; right: 20px; z-index: 999;
+            background-color: var(--container-bg); border: 1px solid var(--input-border);
+            width: 45px; height: 45px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer; box-shadow: 0 4px 10px var(--shadow-light);
+            transition: all 0.3s ease;
+        }
+        body.dark-theme #themeToggleButton {
+            background-color: var(--container-bg-dark); border-color: var(--input-border-dark);
+        }
+        #themeToggleButton:hover { transform: translateY(-2px); box-shadow: 0 6px 15px var(--shadow-light); }
+
+        .audio-player { display: flex; flex-direction: column; gap: 15px; }
+        .player-controls-bar { display: flex; align-items: center; gap: 12px; padding: 8px; border-radius: 10px; background-color: rgba(0,0,0,0.05); }
+        body.dark-theme .player-controls-bar { background-color: rgba(255,255,255,0.05); }
+        .playback-buttons { display: flex; align-items: center; gap: 5px; }
+        .audio-player__button { background: none; border: none; color: var(--text-color); font-size: 1.1rem; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; }
+        body.dark-theme .audio-player__button { color: var(--text-light); }
+        .audio-player__button:hover { background-color: rgba(0,0,0,0.1); }
+        body.dark-theme .audio-player__button:hover { background-color: rgba(255,255,255,0.1); }
+        .audio-player__button.main-play-pause { font-size: 1.5rem; color: var(--accent-blue); }
+        .progress-and-time-container { flex-grow: 1; display: flex; align-items: center; gap: 10px; overflow: hidden; }
+        .audio-player__progress-container { flex-grow: 1; height: 2px; background-color: #dee2e6; border-radius: 2px; cursor: pointer; position: relative; transition: height 0.2s ease; }
+        .player-controls-bar:hover .audio-player__progress-container { height: 5px; }
+        body.dark-theme .audio-player__progress-container { background-color: #495057; }
+        .audio-player__progress-bar { width: 0%; height: 100%; background-color: var(--accent-blue); border-radius: 2px; position: absolute; pointer-events: none; }
+        .audio-player__progress-thumb { position: absolute; top: 50%; width: 10px; height: 10px; background-color: var(--accent-blue); border-radius: 50%; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.2s ease; pointer-events: none; }
+        .player-controls-bar:hover .audio-player__progress-thumb { opacity: 1; }
+        .audio-player__time-display { font-size: 0.85rem; color: #6c757d; white-space: nowrap; }
+        body.dark-theme .audio-player__time-display { color: #adb5bd; }
+        .player-features { display: flex; align-items: center; gap: 5px; }
+
+        .audio-player__volume-control {
+            display: flex;
+            align-items: center;
+        }
+        .volume-slider-container {
+            width: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: width 0.3s ease, opacity 0.2s ease, padding-left 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .audio-player__volume-control:hover .volume-slider-container {
+            width: 130px;
+            opacity: 1;
+            padding-left: 10px;
+        }
+        input[type=range].volume-slider {
+            -webkit-appearance: none; appearance: none;
+            height: 4px; background: #bdc3c7; border-radius: 2px;
+            outline: none; box-sizing: border-box;
+            flex-grow: 1;
+        }
+        body.dark-theme input[type=range].volume-slider {
+            background: #495057;
+        }
+        input[type=range].volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none;
+            width: 14px; height: 14px;
+            background: var(--accent-blue); cursor: pointer;
+            border-radius: 50%;
+        }
+        input[type=range].volume-slider::-moz-range-thumb {
+            width: 14px; height: 14px;
+            background: var(--accent-blue); cursor: pointer;
+            border-radius: 50%; border: none;
+        }
+        #volumePercentage {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-color);
+            min-width: 35px;
+        }
+        body.dark-theme #volumePercentage {
+            color: var(--text-light);
+        }
+
+        /* --- CSS CHO PLAYLIST --- */
+        .playlist-management { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; }
+        .playlist-management h4 { margin: 0; font-size: 1rem; color: var(--text-color); }
+        body.dark-theme .playlist-management h4 { color: var(--text-light); }
+        .playlist-management .button-group { margin: 0; }
+        .playlist-management .button-group .btn { padding: 8px 15px; font-size: 0.9rem; }
+
+        .audio-player__playlist-container {
+            max-height: 280px; overflow-y: auto; margin-top: 5px; padding-right: 5px;
+        }
+        .audio-player__playlist-container::-webkit-scrollbar { width: 6px; }
+        .audio-player__playlist-container::-webkit-scrollbar-track { background: transparent; }
+        .audio-player__playlist-container::-webkit-scrollbar-thumb { background-color: rgba(0, 0, 0, 0.2); border-radius: 6px; }
+        body.dark-theme .audio-player__playlist-container::-webkit-scrollbar-thumb { background-color: rgba(255, 255, 255, 0.2); }
+
+        .audio-player__playlist-item {
+            display: flex; align-items: center;
+            padding: 8px 10px; border-radius: 8px;
+            border-bottom: none;
+            transition: background-color 0.25s ease;
+            gap: 12px;
+        }
+        .sortable-ghost { opacity: 0.4; background: var(--accent-blue); }
+        .drag-handle { cursor: grab; color: #bdc3c7; }
+        body.dark-theme .drag-handle { color: #5a6e85; }
+
+        .audio-player__playlist-item:hover { background-color: rgba(0,0,0,0.05); }
+        body.dark-theme .audio-player__playlist-item:hover { background-color: rgba(255,255,255,0.08); }
+        .audio-player__playlist-item:nth-child(even) { background-color: rgba(0,0,0,0.02); }
+        .audio-player__playlist-item:nth-child(even):hover { background-color: rgba(0,0,0,0.07); }
+        body.dark-theme .audio-player__playlist-item:nth-child(even) { background-color: rgba(255,255,255,0.03); }
+        body.dark-theme .audio-player__playlist-item:nth-child(even):hover { background-color: rgba(255,255,255,0.1); }
+        .audio-player__playlist-item.active { background-color: var(--accent-blue) !important; color: white; }
+        .audio-player__playlist-item.active .playlist-item__title,
+        .audio-player__playlist-item.active .drag-handle { color: white; }
+
+        .playlist-item__thumbnail {
+            width: 32px; height: 32px; flex-shrink: 0;
+            background-color: rgba(0,0,0,0.05);
+            border-radius: 6px; display: flex;
+            align-items: center; justify-content: center;
+            font-size: 1rem; color: var(--text-color);
+        }
+        body.dark-theme .playlist-item__thumbnail { background-color: rgba(255,255,255,0.1); color: var(--text-light); }
+        .playlist-item__playing-indicator {
+            width: 32px; height: 32px; flex-shrink: 0;
+            display: none; align-items: flex-end;
+            justify-content: space-evenly; padding: 6px; box-sizing: border-box;
+        }
+        .playlist-item__playing-indicator .bar { width: 4px; background-color: white; border-radius: 2px; animation: bounce-bar 1.2s ease-in-out infinite; }
+        .playlist-item__playing-indicator .bar:nth-child(2) { animation-delay: -0.2s; }
+        .playlist-item__playing-indicator .bar:nth-child(3) { animation-delay: -0.4s; }
+
+        .audio-player__playlist-item.active .playlist-item__playing-indicator { display: flex; }
+        .audio-player__playlist-item.active .playlist-item__thumbnail { display: none; }
+
+        @keyframes bounce-bar { 0%, 100% { height: 20%; } 50% { height: 100%; } }
+
+        .playlist-item__title {
+            flex-grow: 1; color: var(--text-color);
+            font-weight: 500; font-size: 0.95rem;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        body.dark-theme .playlist-item__title { color: var(--text-light); }
+        .remove-song-btn {
+            background: none; border: none; color: #bdc3c7;
+            cursor: pointer; font-size: 1rem;
+            padding: 5px; margin-left: 10px;
+            opacity: 0; visibility: hidden;
+            transition: all 0.2s ease;
+        }
+        .audio-player__playlist-item:hover .remove-song-btn { opacity: 0.6; visibility: visible; }
+        .remove-song-btn:hover { opacity: 1 !important; color: var(--accent-red); transform: scale(1.1); }
+
+        /* --- CSS CHO RESPONSIVE --- */
+        @media (max-width: 1024px) { .dashboard-layout { flex-direction: column; } }
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .container { padding: 15px; }
+            h1 { font-size: 2rem; margin-bottom: 20px; }
+            .dashboard-layout, .main-panel, .sidebar { gap: 15px; }
+            .button-group { justify-content: center; }
+        }
+        @media (max-width: 480px) {
+            .day-input-row { grid-template-columns: 1fr; gap: 8px; }
+            .day-input-row label { text-align: left; padding-right: 0; }
+            .day-result-wrapper { justify-content: flex-start; }
+            .player-controls-bar { flex-wrap: wrap; justify-content: center; gap: 5px; }
+            .password-input-group { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div id="notification-container"></div>
+    <button id="themeToggleButton" title="Chuyển đổi chế độ sáng/tối"></button>
+
+    <div class="container">
+        <h1>LONG - DVC IPA</h1>
+        <div class="dashboard-layout">
+            <main class="main-panel">
+                <div class="section-box">
+                    <h2><i class="fas fa-headphones-alt"></i> Trình Phát Nhạc</h2>
+                    <div class="audio-player">
+                        <audio id="audioElement"></audio>
+                        <div class="player-controls-bar">
+                            <div class="playback-buttons">
+                                <button class="audio-player__button" id="prevSongButton" title="Bài trước"><i class="fas fa-backward-step"></i></button>
+                                <button class="audio-player__button main-play-pause" id="playPauseButton" title="Phát/Tạm dừng"><i class="fas fa-play"></i></button>
+                                <button class="audio-player__button" id="nextSongButton" title="Bài kế tiếp"><i class="fas fa-forward-step"></i></button>
+                            </div>
+                            <div class="progress-and-time-container">
+                                <span id="currentTime" class="audio-player__time-display">0:00</span>
+                                <div class="audio-player__progress-container" id="progressBarContainer">
+                                    <div class="audio-player__progress-bar" id="progressBar"></div>
+                                    <div class="audio-player__progress-thumb" id="progressThumb"></div>
+                                </div>
+                                <span id="duration" class="audio-player__time-display">0:00</span>
+                            </div>
+                            <div class="player-features">
+                                <button class="audio-player__button" id="shuffleButton" title="Ngẫu nhiên"><i class="fas fa-random"></i></button>
+                                <button class="audio-player__button" id="loopButton" title="Lặp lại"><i class="fas fa-redo"></i></button>
+                                <div class="audio-player__volume-control">
+                                     <button class="audio-player__button" id="volumeIcon" title="Âm lượng"><i class="fas fa-volume-high"></i></button>
+                                     <div class="volume-slider-container">
+                                        <input type="range" min="0" max="1" step="0.01" value="0.7" class="volume-slider" id="volumeSlider">
+                                        <span id="volumePercentage"></span>
+                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="playlist-management">
+                            <h4>Danh sách phát</h4>
+                            <div class="button-group">
+                                <input type="file" id="audioFileInput" accept="audio/*" multiple style="display: none;">
+                                <button class="btn btn-primary" id="openFileButton"><i class="fas fa-folder-open"></i> Thêm</button>
+                                <button class="btn btn-tertiary" id="deleteAllSongsButton"><i class="fas fa-trash"></i> Xóa hết</button>
+                            </div>
+                        </div>
+                        <div class="audio-player__playlist-container" id="playlistContainer"><p class="empty-playlist-message" id="emptyPlaylistMessage">Danh sách phát trống</p></div>
+                    </div>
+                </div>
+                 <div class="section-box" id="password-generator-section">
+                    <h2><i class="fas fa-shield-alt"></i> Trình Tạo Mật Khẩu</h2>
+                    <div class="password-input-group">
+                        <div class="input-wrapper">
+                            <i class="fas fa-gamepad"></i>
+                            <input type="text" id="passwordAppNameInput" placeholder="Nhập tên game...">
+                        </div>
+                        <button id="passwordGenerateBtn" class="btn btn-primary">
+                            <i class="fas fa-key"></i>
+                            <span>Tạo Mới</span>
+                        </button>
+                    </div>
+                    <div id="passwordResultWrapper" class="password-output-wrapper" style="display: none;">
+                        <pre id="passwordOutputDisplay"></pre>
+                        <button id="copyPasswordBtn" title="Sao chép mật khẩu">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                    <div class="button-group">
+                        <button id="passwordClearBtn" class="btn btn-tertiary">
+                            <i class="fas fa-eraser"></i>
+                            <span>Xóa Toàn Bộ</span>
+                        </button>
+                    </div>
+                </div>
+                </main>
+            <aside class="sidebar">
+                <div class="section-box">
+                     <h2><i class="fas fa-link"></i> Rút Gọn Link</h2>
+                    <div class="input-group">
+                        <label for="appNameInput">Tên Ứng Dụng:</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-mobile-alt"></i>
+                            <input type="text" id="appNameInput" placeholder="Nhập Tên Ứng Dụng">
+                        </div>
+                    </div>
+
+                    <div id="dayInputs"></div>
+                    
+                    <div class="button-group">
+                        <button id="shortenAllButton" class="btn btn-primary"><i class="fas fa-cut"></i> <span>Rút gọn & Tạo HTML</span></button>
+                        <button id="clearAllLinkShortenerButton" class="btn btn-tertiary"><i class="fas fa-eraser"></i> <span>Xóa</span></button>
+                    </div>
+
+                    <div id="githubLinkResultContainer" class="password-output-wrapper" style="display: none; margin-top: 20px;">
+                        <label for="githubLinkOutput" class="output-label">Mã HTML Github Đã Cập Nhật:</label>
+                        <pre id="githubLinkOutput"></pre>
+                        <button id="copyHtmlBtn" title="Sao chép HTML">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+<script>
+    // --- KHAI BÁO BIẾN TOÀN CỤC ---
+    const days = ['Thứ 2 ', 'Thứ 3 ', 'Thứ 4 ', 'Thứ 5 ', 'Thứ 6 ', 'Thứ 7 ', 'Chủ Nhật '];
+    let shortenedLinks = {};
+    const originalGithubHTML = `<!DOCTYPE html>\n<html lang="vi">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>DVC IPA</title>\n    <style>body{font-family:Arial,sans-serif;margin:0;padding:0;background-color:#f4f4f9}.profile-container{width:100%;max-width:800px;margin:50px auto;background:#fff;box-shadow:0 0 20px rgba(0,0,0,.1);border-radius:8px;overflow:hidden}.profile-header{background-color:#6c63ff;color:#fff;padding:20px;text-align:center}.profile-header h1{margin:0}.profile-content{padding:20px}.profile-content img{border-radius:50%;max-width:150px;display:block;margin:0 auto}.profile-content h2{text-align:center;margin-top:10px}.profile-content p{text-align:center;color:#555}.profile-social{text-align:center;margin-top:20px}.profile-social a{margin:0 10px;text-decoration:none;color:#6c63ff;font-size:20px}.day-content{display:none}.button{background-color:#6c63ff;border:none;color:#fff;padding:.375rem .66rem;text-align:center;text-decoration:none;display:inline-block;font-size:1rem;cursor:pointer;border-radius:4px}a{text-decoration:none;color:#fff}</style>\n    <script>function showDateTime(){const e=new Date,t=e.toLocaleString("vi-VN");document.getElementById("dateTime").textContent=t}window.onload=showDateTime;<\/script>\n</head>\n<body>\n    <div class="profile-container">\n        <div class="profile-header"><h1>DVC IPA </h1></div>\n        <div class="profile-content">\n            <img src="https://thinhkk019.github.io/thinhkk/DVC.png" alt="Ảnh đại diện">\n            <h2>Link lấy key Legend Of Fireball</h2>\n            <p id="dateTime"></p>\n            <center>\n                <div id="Monday" class="day-content"><p class="button"><a href="#" title="thuhai">Click vào đây để tiếp tục…</a></p></div>\n                <div id="Tuesday" class="day-content"><p class="button"><a href="#" title="thuba">Click vào đây để tiếp tục…</a></p></div>\n                <div id="Wednesday" class="day-content"><p class="button"><a href="#" title="thutu">Click vào đây để tiếp tục…</a></p></div>\n                <div id="Thursday" class="day-content"><p class="button"><a href="#" title="thunam">Click vào đây để tiếp tục…</a></p></div>\n                <div id="Friday" class="day-content"><p class="button"><a href="#" title="thusau">Click vào đây để tiếp tục…</a></p></div>\n                <div id="Saturday" class="day-content"><p class="button"><a href="#" title="thubay">Click vào đây để tiếp tục…</a></p></div>\n                <div id="Sunday" class="day-content"><p class="button"><a href="#" title="chunhat">Click vào đây để tiếp tục…</a></p></div>\n            </center>\n            <script>const e=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],t=new Date,o=t.getDay(),n=e[o];document.getElementById(n).style.display="block";<\/script>\n            <div class="profile-social"><a href="https://t.me/dvcipaios" title="KhoGame"> Kho game </a><a href="https://t.me/dvcipafree" title="NhomChat">Nhóm Chat</a></div>\n        </div>\n    </div>\n</body>\n</html>`;
+
+    // --- CÁC HÀM TIỆN ÍCH ---
+    function showNotification(message, type = 'info') {
+        const container = document.getElementById('notification-container');
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        const icon = type === 'success' ? 'check-circle' : (type === 'error' ? 'times-circle' : 'info-circle');
+        notification.innerHTML = `
+            <i class="notification__icon fas fa-${icon}"></i>
+            <div class="notification__content">
+                <p class="notification__message">${message}</p>
+            </div>
+            <button class="notification__close-btn" title="Đóng">&times;</button>
+        `;
+        container.appendChild(notification);
+        const closeButton = notification.querySelector('.notification__close-btn');
+        const closeNotification = () => {
+            notification.classList.add('notification--out');
+            notification.addEventListener('animationend', (e) => {
+                if (e.animationName === 'slideOut') {
+                    notification.remove();
+                }
+            }, { once: true });
+        };
+        const autoCloseTimeout = setTimeout(closeNotification, 1500);
+        closeButton.addEventListener('click', () => {
+            clearTimeout(autoCloseTimeout);
+            closeNotification();
+        });
+    }
+
+    // --- LOGIC CỦA CHỨC NĂNG RÚT GỌN LINK ---
+    async function getShortenedLink(urlToShorten, alias = '') {
+        const token = '06cba1c6bfab33d69d211e3eb8aac9427006b6dec371151e58e98c45f9ac8506';
+        let apiUrl = `https://yeumoney.com/QL_api.php?token=${token}&format=json&url=${encodeURIComponent(urlToShorten)}`;
+        if (alias) {
+            apiUrl += `&alias=${encodeURIComponent(alias)}`;
+        }
+        try {
+            const response = await fetch(apiUrl);
+            if (!response.ok) throw new Error(`Lỗi mạng: ${response.statusText}`);
+            const result = await response.json();
+            if (result.status === 'success') {
+                return result.shortenedUrl;
+            } else {
+                throw new Error(result.message || 'Lỗi không xác định từ API');
+            }
+        } catch (error) {
+            throw new Error(`Lỗi kết nối hoặc API: ${error.message}`);
+        }
+    }
+
+    async function shortenAllLinks() {
+        const appNameInput = document.getElementById('appNameInput');
+        const appName = appNameInput.value.trim();
+        if (appName === '') {
+            showNotification('Vui lòng nhập Tên Ứng Dụng.', 'error');
+            appNameInput.focus();
+            return;
+        }
+        const hasAtLeastOneLink = days.some((day, i) => document.getElementById(`urlInput${i}`).value.trim() !== '');
+        if (!hasAtLeastOneLink) {
+            showNotification('Vui lòng nhập ít nhất một link để rút gọn.', 'error');
+            return;
+        }
+        const promises = [];
+        let allSuccess = true;
+        for (let i = 0; i < days.length; i++) {
+            const urlInput = document.getElementById(`urlInput${i}`);
+            const aliasInput = document.getElementById(`aliasInput${i}`);
+            const resultEl = document.getElementById(`result${i}`);
+            
+            aliasInput.classList.remove('success', 'error');
+            resultEl.innerHTML = '';
+
+            if (urlInput.value) {
+                const dayAlias = aliasInput.value.trim();
+                resultEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+                const promise = getShortenedLink(urlInput.value, dayAlias)
+                    .then(shortenedUrl => {
+                        shortenedLinks[days[i]] = shortenedUrl;
+                        const code = shortenedUrl.split('/').pop();
+                        
+                        aliasInput.value = code;
+                        aliasInput.classList.add('success');
+                        resultEl.innerHTML = '';
+                    })
+                    .catch(error => {
+                        shortenedLinks[days[i]] = '';
+                        aliasInput.classList.add('error');
+                        resultEl.innerHTML = `<span class="error-message" title="${error.message}">Lỗi</span>`;
+                        allSuccess = false;
+                    });
+                promises.push(promise);
+            } else {
+                shortenedLinks[days[i]] = '';
+            }
+        }
+        await Promise.all(promises);
+        updateGithubLink();
+        if (allSuccess) {
+            showNotification('Tất cả link đã được rút gọn và cập nhật!', 'success');
+        } else {
+            showNotification('Đã xử lý xong, một số link bị lỗi!', 'error');
+        }
+    }
+
+    function updateGithubLink() {
+        let updatedHTML = originalGithubHTML;
+        const dayNames = ['thuhai', 'thuba', 'thutu', 'thunam', 'thusau', 'thubay', 'chunhat'];
+        for (let i = 0; i < days.length; i++) {
+            if (shortenedLinks[days[i]]) {
+                const regex = new RegExp(`href="#" title="${dayNames[i]}"`, 'g');
+                updatedHTML = updatedHTML.replace(regex, `href="${shortenedLinks[days[i]]}" title="${dayNames[i]}"`);
+            }
+        }
+        const appName = document.getElementById('appNameInput').value;
+        updatedHTML = updatedHTML.replace(/<h2>Link lấy key (.*?)<\/h2>/, `<h2>Link lấy key ${appName}</h2>`);
+        const githubLinkOutput = document.getElementById('githubLinkOutput');
+        githubLinkOutput.textContent = updatedHTML;
+        document.getElementById('githubLinkResultContainer').style.display = 'block';
+    }
+
+    function clearLinkShortenerFields() {
+        document.getElementById('appNameInput').value = '';
+        days.forEach((day, i) => {
+            document.getElementById(`urlInput${i}`).value = '';
+            const aliasInput = document.getElementById(`aliasInput${i}`);
+            aliasInput.value = ''; 
+            aliasInput.classList.remove('success', 'error');
+            document.getElementById(`result${i}`).innerHTML = '';
+        });
+        document.getElementById('githubLinkOutput').textContent = '';
+        document.getElementById('githubLinkResultContainer').style.display = 'none';
+        shortenedLinks = {};
+        showNotification('Đã xóa tất cả nội dung.', 'success');
+    }
+
+    function createDayInputs() {
+        const container = document.getElementById('dayInputs');
+        container.innerHTML = '';
+        days.forEach((day, index) => {
+            const row = document.createElement('div');
+            row.className = 'day-input-row';
+            row.innerHTML = `
+                <label for="urlInput${index}">${day.trim()}</label>
+                <div class="input-wrapper-extended">
+                    <input type="text" id="urlInput${index}" placeholder="Dán Link Rút Gọn">
+                    <button class="clear-single-link-btn" data-input-id="urlInput${index}" title="Xóa dòng này"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="input-wrapper-extended">
+                     <input type="text" id="aliasInput${index}" placeholder="Kết quả" readonly>
+                </div>
+                <div class="day-result-wrapper" id="result${index}"></div>
+            `;
+            container.appendChild(row);
+        });
+    }
+
+    // --- LOGIC CỦA CHỨC NĂNG TẠO MẬT KHẨU (PHIÊN BẢN NÂNG CẤP) ---
+    const passwordSection = {
+        appNameInput: document.getElementById('passwordAppNameInput'),
+        generateBtn: document.getElementById('passwordGenerateBtn'),
+        copyBtn: document.getElementById('copyPasswordBtn'),
+        clearBtn: document.getElementById('passwordClearBtn'),
+        resultWrapper: document.getElementById('passwordResultWrapper'),
+        outputDisplay: document.getElementById('passwordOutputDisplay'),
+
+        init() {
+            this.generateBtn.addEventListener('click', () => this.generate());
+            this.copyBtn.addEventListener('click', () => this.copy());
+            this.clearBtn.addEventListener('click', () => this.clear());
+        },
+
+        generate() {
+            const gameName = this.appNameInput.value.trim();
+            if (gameName === '') {
+                showNotification('Vui lòng nhập Tên Game/Ứng dụng.', 'error');
+                this.appNameInput.focus();
+                return;
+            }
+            const originalIcon = this.generateBtn.querySelector('i').className;
+            const originalText = this.generateBtn.querySelector('span').textContent;
+            this.generateBtn.disabled = true;
+            this.generateBtn.querySelector('i').className = 'fas fa-spinner fa-spin';
+            this.generateBtn.querySelector('span').textContent = 'Đang tạo...';
+
+            setTimeout(() => {
+                const daysPassword = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+                let password = '';
+                daysPassword.forEach((day, index) => {
+                    const randomNum = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+                    password += `${day}:${gameName}${randomNum}`;
+                    if (index < daysPassword.length - 1) { password += '||'; }
+                });
+
+                this.outputDisplay.textContent = password;
+                this.resultWrapper.style.display = 'block';
+
+                this.generateBtn.disabled = false;
+                this.generateBtn.querySelector('i').className = originalIcon;
+                this.generateBtn.querySelector('span').textContent = originalText;
+
+                showNotification('Đã tạo mật khẩu thành công!', 'success');
+            }, 200);
+        },
+
+        copy() {
+            if (this.outputDisplay.textContent.trim() === '') {
+                showNotification('Chưa có mật khẩu để sao chép.', 'error');
+                return;
+            }
+            navigator.clipboard.writeText(this.outputDisplay.textContent).then(() => {
+                const icon = this.copyBtn.querySelector('i');
+                const originalIconClass = icon.className;
+
+                icon.className = 'fas fa-check';
+                this.copyBtn.classList.add('copied');
+                showNotification('Đã sao chép vào bộ nhớ đệm!', 'success');
+
+                setTimeout(() => {
+                    icon.className = originalIconClass;
+                    this.copyBtn.classList.remove('copied');
+                }, 1500);
+            });
+        },
+
+        clear() {
+            this.appNameInput.value = '';
+            this.outputDisplay.textContent = '';
+            this.resultWrapper.style.display = 'none';
+            showNotification('Đã dọn dẹp khu vực mật khẩu.', 'info');
+        }
+    };
+
+    // --- LOGIC CỦA TRÌNH PHÁT NHẠC (AUDIO PLAYER) ---
+    const audioPlayer = {
+        audioElement: document.getElementById('audioElement'),
+        playPauseButton: document.getElementById('playPauseButton'),
+        prevSongButton: document.getElementById('prevSongButton'),
+        nextSongButton: document.getElementById('nextSongButton'),
+        loopButton: document.getElementById('loopButton'),
+        shuffleButton: document.getElementById('shuffleButton'),
+        progressBarContainer: document.getElementById('progressBarContainer'),
+        progressBar: document.getElementById('progressBar'),
+        progressThumb: document.getElementById('progressThumb'),
+        currentTimeSpan: document.getElementById('currentTime'),
+        durationSpan: document.getElementById('duration'),
+        audioFileInput: document.getElementById('audioFileInput'),
+        openFileButton: document.getElementById('openFileButton'),
+        deleteAllSongsButton: document.getElementById('deleteAllSongsButton'),
+        volumeIcon: document.getElementById('volumeIcon'),
+        volumeSlider: document.getElementById('volumeSlider'),
+        playlistContainer: document.getElementById('playlistContainer'),
+        emptyPlaylistMessage: document.getElementById('emptyPlaylistMessage'),
+
+        playlist: [],
+        currentSongIndex: -1,
+        isLooping: false,
+        isShuffling: false,
+        isDraggingProgress: false,
+
+        init() {
+            this.bindEvents();
+            this.loadSong(-1);
+            const savedVolume = localStorage.getItem('playerVolume');
+            if (savedVolume !== null) { this.setVolume(parseFloat(savedVolume)); } else { this.setVolume(0.7); }
+
+            new Sortable(this.playlistContainer, {
+                animation: 150,
+                handle: '.drag-handle',
+                onEnd: (evt) => {
+                    const { oldIndex, newIndex } = evt;
+                    const [movedItem] = this.playlist.splice(oldIndex, 1);
+                    this.playlist.splice(newIndex, 0, movedItem);
+                    if (this.currentSongIndex === oldIndex) { this.currentSongIndex = newIndex; }
+                    else if (oldIndex < this.currentSongIndex && newIndex >= this.currentSongIndex) { this.currentSongIndex--; }
+                    else if (oldIndex > this.currentSongIndex && newIndex <= this.currentSongIndex) { this.currentSongIndex++; }
+                    this.renderPlaylist();
+                }
+            });
+        },
+
+        removeSongAt(index) {
+            if (index < 0 || index >= this.playlist.length) return;
+            const songName = this.playlist[index].name;
+            if (!confirm(`Bạn có chắc muốn xóa bài hát "${songName}"?`)) return;
+            this.playlist.splice(index, 1);
+            if (index === this.currentSongIndex) {
+                this.audioElement.pause();
+                this.loadSong(this.currentSongIndex);
+            } else if (index < this.currentSongIndex) {
+                this.currentSongIndex--;
+            }
+            this.renderPlaylist();
+        },
+
+        renderPlaylist() {
+            this.playlistContainer.innerHTML = '';
+            if (this.playlist.length === 0) {
+                this.playlistContainer.appendChild(this.emptyPlaylistMessage);
+                this.emptyPlaylistMessage.style.display = 'block';
+                return;
+            }
+            this.emptyPlaylistMessage.style.display = 'none';
+
+            this.playlist.forEach((file, index) => {
+                const item = document.createElement('div');
+                item.className = 'audio-player__playlist-item';
+                if (index === this.currentSongIndex) item.classList.add('active');
+                item.dataset.index = index;
+                item.innerHTML = `
+                    <i class="fas fa-bars drag-handle"></i>
+                    <div class="playlist-item__thumbnail">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <div class="playlist-item__playing-indicator">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                    <span class="playlist-item__title">${file.name}</span>
+                    <button class="remove-song-btn" title="Xóa bài này"><i class="fas fa-times"></i></button>
+                `;
+                item.addEventListener('click', (e) => {
+                    if (!e.target.closest('.remove-song-btn')) {
+                        this.loadSong(index);
+                    }
+                });
+                item.querySelector('.remove-song-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.removeSongAt(index);
+                });
+                this.playlistContainer.appendChild(item);
+            });
+        },
+
+        formatTime(seconds) { const minutes = Math.floor(seconds / 60); const secs = Math.floor(seconds % 60); return isNaN(minutes) || isNaN(secs) ? '0:00' : `${minutes}:${secs < 10 ? '0' : ''}${secs}`; },
+
+        loadSong(index) {
+            if (this.playlist.length === 0) { this.audioElement.src = ''; this.playPauseButton.innerHTML = '<i class="fas fa-play"></i>'; this.renderPlaylist(); return; }
+            this.currentSongIndex = (index < 0) ? 0 : (index >= this.playlist.length ? 0 : index);
+            const file = this.playlist[this.currentSongIndex];
+            if(this.audioElement.src) URL.revokeObjectURL(this.audioElement.src);
+            this.audioElement.src = URL.createObjectURL(file);
+            this.audioElement.play();
+            this.renderPlaylist();
+        },
+
+        togglePlayPause() {
+            if (!this.audioElement.src && this.playlist.length > 0) { this.loadSong(0); return; }
+            if (this.audioElement.paused) this.audioElement.play();
+            else this.audioElement.pause();
+        },
+
+        playNextSong() {
+            let nextIndex = this.currentSongIndex;
+            if(this.playlist.length > 1 && this.isShuffling) {
+                do {
+                    nextIndex = Math.floor(Math.random() * this.playlist.length);
+                } while (nextIndex === this.currentSongIndex);
+            } else {
+                nextIndex = (this.currentSongIndex + 1) % this.playlist.length;
+            }
+            this.loadSong(nextIndex);
+        },
+
+        playPrevSong() {
+            let prevIndex = (this.currentSongIndex - 1 + this.playlist.length) % this.playlist.length;
+            this.loadSong(prevIndex);
+        },
+
+        setVolume(level) {
+            const clampedLevel = Math.max(0, Math.min(1, level));
+            this.audioElement.volume = clampedLevel;
+            this.volumeSlider.value = clampedLevel;
+            const volumePercentage = document.getElementById('volumePercentage');
+            if (volumePercentage) {
+                volumePercentage.textContent = `${Math.round(clampedLevel * 100)}%`;
+            }
+            this.updateVolumeDisplay();
+            localStorage.setItem('playerVolume', clampedLevel);
+        },
+
+        updateVolumeDisplay() {
+            const volume = this.audioElement.volume;
+            if (volume === 0) this.volumeIcon.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            else if (volume < 0.5) this.volumeIcon.innerHTML = '<i class="fas fa-volume-down"></i>';
+            else this.volumeIcon.innerHTML = '<i class="fas fa-volume-high"></i>';
+        },
+
+        bindEvents() {
+            this.audioElement.addEventListener('play', () => { this.playPauseButton.innerHTML = '<i class="fas fa-pause"></i>'; });
+            this.audioElement.addEventListener('pause', () => { this.playPauseButton.innerHTML = '<i class="fas fa-play"></i>'; });
+
+            this.audioElement.addEventListener('ended', () => {
+                if(this.isLooping) this.audioElement.play();
+                else this.playNextSong();
+            });
+
+            this.audioElement.addEventListener('timeupdate', () => {
+                const { currentTime, duration } = this.audioElement;
+                this.currentTimeSpan.textContent = this.formatTime(currentTime);
+                this.durationSpan.textContent = this.formatTime(duration);
+                if (duration && !this.isDraggingProgress) {
+                    const percentage = (currentTime / duration) * 100;
+                    this.progressBar.style.width = `${percentage}%`;
+                    this.progressThumb.style.left = `${percentage}%`;
+                }
+            });
+
+            this.playPauseButton.addEventListener('click', () => this.togglePlayPause());
+            this.nextSongButton.addEventListener('click', () => this.playNextSong());
+            this.prevSongButton.addEventListener('click', () => this.playPrevSong());
+            this.loopButton.addEventListener('click', () => {
+                this.isLooping = !this.isLooping;
+                this.loopButton.style.color = this.isLooping ? 'var(--accent-blue)' : 'inherit';
+                showNotification(`Lặp lại bài hát: ${this.isLooping ? 'Bật' : 'Tắt'}`, 'info');
+            });
+            this.shuffleButton.addEventListener('click', () => {
+                this.isShuffling = !this.isShuffling;
+                this.shuffleButton.style.color = this.isShuffling ? 'var(--accent-blue)' : 'inherit';
+                showNotification(`Phát ngẫu nhiên: ${this.isShuffling ? 'Bật' : 'Tắt'}`, 'info');
+            });
+
+            const handleSeek = (e) => {
+                if (!this.audioElement.duration) return;
+                const rect = this.progressBarContainer.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const percentage = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+                this.audioElement.currentTime = percentage * this.audioElement.duration;
+                this.progressBar.style.width = `${percentage * 100}%`;
+                this.progressThumb.style.left = `${percentage * 100}%`;
+            };
+
+            this.progressBarContainer.addEventListener('mousedown', (e) => { this.isDraggingProgress = true; handleSeek(e); });
+            document.addEventListener('mousemove', (e) => { if (this.isDraggingProgress) handleSeek(e); });
+            document.addEventListener('mouseup', () => { this.isDraggingProgress = false; });
+
+            this.progressBarContainer.addEventListener('touchstart', (e) => { this.isDraggingProgress = true; handleSeek(e); });
+            document.addEventListener('touchmove', (e) => { if (this.isDraggingProgress) handleSeek(e); });
+            document.addEventListener('touchend', () => { this.isDraggingProgress = false; });
+
+            this.openFileButton.addEventListener('click', () => this.audioFileInput.click());
+            this.audioFileInput.addEventListener('change', (event) => {
+                const files = Array.from(event.target.files);
+                const wasEmpty = this.playlist.length === 0;
+                this.playlist.push(...files);
+                this.renderPlaylist();
+                if(wasEmpty && this.playlist.length > 0) this.loadSong(0);
+                event.target.value = '';
+            });
+            this.deleteAllSongsButton.addEventListener('click', () => {
+                if(this.playlist.length > 0 && confirm('Bạn có chắc muốn xóa tất cả bài hát?')) {
+                    this.playlist = [];
+                    this.currentSongIndex = -1;
+                    this.audioElement.pause();
+                    this.loadSong(-1);
+                }
+            });
+
+            this.volumeSlider.addEventListener('input', () => this.setVolume(this.volumeSlider.value));
+            this.volumeIcon.addEventListener('click', () => {
+                const lastVolume = parseFloat(localStorage.getItem('playerVolume')) || 0.7;
+                if (this.audioElement.volume > 0) {
+                    this.audioElement.dataset.lastVolume = this.audioElement.volume;
+                    this.setVolume(0);
+                } else {
+                    const restoreVolume = this.audioElement.dataset.lastVolume || lastVolume;
+                    this.setVolume(restoreVolume);
+                }
+            });
+        }
+    };
+
+    // --- HÀM KHỞI TẠO CHÍNH KHI TRANG ĐƯỢC TẢI XONG ---
+    document.addEventListener('DOMContentLoaded', function() {
+        // Khởi tạo các module
+        createDayInputs();
+        audioPlayer.init();
+        passwordSection.init();
+
+        // Gán sự kiện cho Rút Gọn Link
+        document.getElementById('shortenAllButton').addEventListener('click', shortenAllLinks);
+        document.getElementById('clearAllLinkShortenerButton').addEventListener('click', clearLinkShortenerFields);
+
+        const dayInputsContainer = document.getElementById('dayInputs');
+        dayInputsContainer.addEventListener('click', function(event) {
+            const target = event.target.closest('button');
+            if (!target) return;
+
+            if (target.classList.contains('clear-single-link-btn')) {
+                const inputId = target.dataset.inputId;
+                document.getElementById(inputId).value = '';
+            }
+            if (target.classList.contains('copy-single-link-btn')) {
+                const linkToCopy = target.dataset.link;
+                navigator.clipboard.writeText(linkToCopy).then(() => {
+                    showNotification('Đã sao chép link!', 'success');
+                });
+            }
+        });
+
+        // GÁN SỰ KIỆN CHO NÚT SAO CHÉP HTML BÊN TRONG
+        const copyHtmlBtn = document.getElementById('copyHtmlBtn');
+        copyHtmlBtn.addEventListener('click', function() {
+            const githubLinkOutput = document.getElementById('githubLinkOutput');
+            const contentToCopy = githubLinkOutput.textContent;
+
+            if (contentToCopy.trim() === '') {
+                showNotification('Chưa có nội dung để sao chép.', 'error');
+                return;
+            }
+
+            navigator.clipboard.writeText(contentToCopy).then(() => {
+                const icon = copyHtmlBtn.querySelector('i');
+                const originalIconClass = icon.className;
+
+                icon.className = 'fas fa-check';
+                copyHtmlBtn.classList.add('copied');
+                showNotification('Đã sao chép mã HTML!', 'success');
+
+                setTimeout(() => {
+                    icon.className = originalIconClass;
+                    copyHtmlBtn.classList.remove('copied');
+                }, 1500);
+            });
+        });
+
+        // Logic chuyển đổi theme (sáng/tối)
+        const themeToggleButton = document.getElementById('themeToggleButton');
+        const body = document.body;
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                body.classList.add('dark-theme');
+                themeToggleButton.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                body.classList.remove('dark-theme');
+                themeToggleButton.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+        }
+
+        const savedTheme = localStorage.getItem('myAppTheme') || 'dark';
+        applyTheme(savedTheme);
+
+        themeToggleButton.addEventListener('click', () => {
+            const newTheme = body.classList.contains('dark-theme') ? 'light' : 'dark';
+            applyTheme(newTheme);
+            localStorage.setItem('myAppTheme', newTheme);
+        });
+    });
+</script>
+</body>
+</html>
